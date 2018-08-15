@@ -42,10 +42,6 @@ public class SendOper {
             BufferedWriter bw = null;
             BufferedReader br = null;
             try {
-                //ServerSocket serverSocket = new ServerSocket();
-                //serverSocket.bind(new InetSocketAddress(8888));
-                //serverSocket.bind(new InetSocketAddress("127.0.0.1", 8888));
-                //Thread.sleep(3000);
                 if (a == 0) {
                     ServerSocket ss = new ServerSocket(port);
                     System.out.println("启动服务器....");
@@ -65,7 +61,7 @@ public class SendOper {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-
+                
             }
         }
         return null;
