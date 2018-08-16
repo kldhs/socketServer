@@ -46,9 +46,9 @@ public class SendOper {
                     ServerSocket ss = new ServerSocket(port);
                     System.out.println("启动服务器....");
                     s = ss.accept();
-                    br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                    bw = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
                 }
+                br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                bw = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
                 System.out.println("客户端:" + s.getInetAddress().getLocalHost() + "已连接到服务器");
                 //读取客户端发送来的消息
                 String mess = br.readLine();

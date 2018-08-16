@@ -1,11 +1,11 @@
 import java.io.*;
 import java.net.Socket;
 
-public class ServerThread extends Thread {
+public class ServerThreadIMOOC extends Thread {
 
     Socket socket = null;
 
-    public ServerThread(Socket socket) {
+    public ServerThreadIMOOC(Socket socket) {
         this.socket = socket;
     }
 
