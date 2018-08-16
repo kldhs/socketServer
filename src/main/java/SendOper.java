@@ -38,33 +38,67 @@ public class SendOper {
     private String send(String cmd) {
         synchronized (this) {
             //synchronized (SendOper.class) {
-            Socket s = null;
-            BufferedWriter bw = null;
+            ServerSocket serverSocket = null;
+            Socket socket = null;
+            InputStream is = null;
+            InputStreamReader isr = null;
             BufferedReader br = null;
+            OutputStream os = null;
+            PrintWriter pw = null;
             try {
-                if (a == 0) {
-                    ServerSocket ss = new ServerSocket(port);
-                    System.out.println("启动服务器....");
-                    s = ss.accept();
-                }
-                br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                bw = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
-                System.out.println("客户端:" + s.getInetAddress().getLocalHost() + "已连接到服务器");
-                //读取客户端发送来的消息
-                String mess = br.readLine();
-                String result = "send:" + getKey(ip, port) + mess;
-                //向客户端发送来的消息
-                String toClient = cmd;
-                bw.write(toClient + "\n");
-                bw.flush();
-                return result;
+                serverSocket = new ServerSocket(port);
+                System.out.println("***服务器启动，等待客户端的连接***");
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                
+            }
+            while (true) {
+                try {
+                    System.out.println("1111");
+                    socket = serverSocket.accept();
+                    //从客户端读取消息
+                    is = socket.getInputStream();
+                    isr = new InputStreamReader(is);
+                    br = new BufferedReader(isr);
+                    String info = null;
+                    while ((info = br.readLine()) != null) {
+                        System.out.println("我是服务器，客户端说：" + info);
+                    }
+                    //关闭socket输入流
+                    socket.shutdownInput();
+                    //向客户端输出消息
+                    os = socket.getOutputStream();
+                    pw = new PrintWriter(os);
+                    pw.write(cmd);
+                    pw.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (pw != null) {
+                            pw.close();
+                        }
+                        if (os != null) {
+                            os.close();
+                        }
+                        if (br != null) {
+                            br.close();
+                        }
+                        if (isr != null) {
+                            isr.close();
+                        }
+                        if (is != null) {
+                            is.close();
+                        }
+                        if (socket != null) {
+                            socket.close();
+                        }
+                        System.out.println("end");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
-        return null;
     }
 
 

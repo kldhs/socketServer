@@ -1,6 +1,12 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class socketServer {
 
@@ -14,6 +20,11 @@ public class socketServer {
             public void run() {
                 String result = send(ip, port, cmd);
                 System.out.println(result);
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         thread.start();
@@ -21,11 +32,23 @@ public class socketServer {
 
     public static void main(String[] args) {
         sendByThread("127.0.0.1", 8088, "a");
-        sendByThread("127.0.0.1", 8088, "b");
-        sendByThread("127.0.0.1", 8088, "c");
-        sendByThread("127.0.0.1", 8089, "D");
-        sendByThread("127.0.0.1", 8089, "E");
-        sendByThread("127.0.0.1", 8089, "F");
+        System.out.println("aaaaa");
+        new Thread(){
+            public void run(){
+                try {
+                    Thread.sleep(20000);
+                    System.out.println("love");
+                    sendByThread("127.0.0.1", 8088, "b");
+                } catch (InterruptedException e) { }
+            }
+        }.start();
+        System.out.println("bbbbb");
+
+
+        //sendByThread("127.0.0.1", 8088, "c");
+        //sendByThread("127.0.0.1", 8089, "D");
+        //sendByThread("127.0.0.1", 8089, "E");
+        //sendByThread("127.0.0.1", 8089, "F");
     }
 
 
