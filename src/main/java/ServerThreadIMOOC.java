@@ -51,12 +51,10 @@ public class ServerThreadIMOOC extends Thread {
                 if (socket!=null) {
                     socket.close();
                 }
+                System.out.println("end");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
-
     }
 }

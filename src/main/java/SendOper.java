@@ -1,10 +1,16 @@
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
 public class SendOper {
+    ServerSocket serverSocket = null;
+    Socket socket = null;
+    InputStream is = null;
+    InputStreamReader isr = null;
+    BufferedReader br = null;
+    OutputStream os = null;
+    PrintWriter pw = null;
     private static HashMap<String, SendOper> map = new HashMap<String, SendOper>();
     private String ip;
     private int port;
@@ -38,72 +44,60 @@ public class SendOper {
     private String send(String cmd) {
         synchronized (this) {
             //synchronized (SendOper.class) {
-            ServerSocket serverSocket = null;
-            Socket socket = null;
-            InputStream is = null;
-            InputStreamReader isr = null;
-            BufferedReader br = null;
-            OutputStream os = null;
-            PrintWriter pw = null;
             try {
-                serverSocket = new ServerSocket(port);
+                if (a == 0) {
+                    serverSocket = new ServerSocket(port);
+                }
                 System.out.println("***服务器启动，等待客户端的连接***");
+                socket = serverSocket.accept();
+                //从客户端读取消息
+                is = socket.getInputStream();
+                isr = new InputStreamReader(is);
+                br = new BufferedReader(isr);
+                String info = null;
+                while ((info = br.readLine()) != null) {
+                    System.out.println("***我是服务器，客户端说：" + info+"***");
+                }
+                //关闭socket输入流
+                socket.shutdownInput();
+                //向客户端输出消息
+                os = socket.getOutputStream();
+                pw = new PrintWriter(os);
+                pw.write(cmd);
+                pw.flush();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-            while (true) {
+            } finally {
                 try {
-                    System.out.println("1111");
-                    socket = serverSocket.accept();
-                    //从客户端读取消息
-                    is = socket.getInputStream();
-                    isr = new InputStreamReader(is);
-                    br = new BufferedReader(isr);
-                    String info = null;
-                    while ((info = br.readLine()) != null) {
-                        System.out.println("我是服务器，客户端说：" + info);
+                    if (pw != null) {
+                        pw.close();
                     }
-                    //关闭socket输入流
-                    socket.shutdownInput();
-                    //向客户端输出消息
-                    os = socket.getOutputStream();
-                    pw = new PrintWriter(os);
-                    pw.write(cmd);
-                    pw.flush();
+                    if (os != null) {
+                        os.close();
+                    }
+                    if (br != null) {
+                        br.close();
+                    }
+                    if (isr != null) {
+                        isr.close();
+                    }
+                    if (is != null) {
+                        is.close();
+                    }
+                    if (socket != null) {
+                        socket.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
-                    try {
-                        if (pw != null) {
-                            pw.close();
-                        }
-                        if (os != null) {
-                            os.close();
-                        }
-                        if (br != null) {
-                            br.close();
-                        }
-                        if (isr != null) {
-                            isr.close();
-                        }
-                        if (is != null) {
-                            is.close();
-                        }
-                        if (socket != null) {
-                            socket.close();
-                        }
-                        System.out.println("end");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }
+        return "***已向"+getKey(ip, port)+"发送："+cmd+"***";
     }
-
 
     public static String send(String ip, int port, String cmd) {
         SendOper oper = getSendOper(ip, port);
         return oper.send(cmd);
     }
+
 }
