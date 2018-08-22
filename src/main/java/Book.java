@@ -1,12 +1,10 @@
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.*;
 
-/**
- *
- *
- *
- *
- *
- */
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder={"bookName","time","author"})
 public class Book {
     @XmlElement(name="BookName")
     private String bookName;

@@ -1,19 +1,38 @@
 import javax.xml.bind.annotation.*;
 import java.util.List;
 
-@XmlAccessorType(XmlAccessType.FIELD)//表示使用这个类中的 private 非静态字段作为 XML 的序列化的属性或者元素,对应属性要使用get、set方法。
-@XmlRootElement(name = "ROOT")
-@XmlType(propOrder = {"code", "name", "age"})//xml格式数据的显示的顺序名字要和定义变量的一样，而不是@XmlElement中的name
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name="ROOT")
+@XmlType(propOrder={"name","age","code","books"})
 public class ScoketBean {
-    @XmlElement(name = "Code", required = true)//定义xml中显示的数据
-    private String code;
-    @XmlElement(name = "Name", required = true)
+    @XmlElement(name="Name",required=true)
     private String name;
-    @XmlElement(name = "Age", required = true)
+    @XmlElement(name="Age",required=true)
     private String age;
+    @XmlElement(name="Code",required=true)
+    private String code;
+    //@XmlElementWrapper注解表示生成一个包装 XML 表示形式的包装器元素。 此元素主要用于生成一个包装集合的包装器 XML 元素
     @XmlElementWrapper(name="ROWS")
     @XmlElement(name="LIST",required=true)
     private List<Book> books;
+    public String getName() {
+        return name;
+    }
+    public String getAge() {
+        return age;
+    }
+    public List<Book> getBooks() {
+        return books;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setAge(String age) {
+        this.age = age;
+    }
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
 
     public String getCode() {
         return code;
@@ -23,34 +42,9 @@ public class ScoketBean {
         this.code = code;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    @Override
-    public String toString() {
+    public String toString(){
         String result = "";
-        result=this.age+","+this.name+this.code+",集合的数据：";
+        result=this.age+","+this.name+",集合的数据：";
         for (Book book:books) {
             result+=book.getAuthor()+book.getTime()+book.getBookName();
         }
