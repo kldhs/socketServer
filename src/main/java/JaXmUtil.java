@@ -83,6 +83,7 @@ public class JaXmUtil {
             ScoketBean bean = (ScoketBean) unmarshaller.unmarshal(xmlFile);
             System.out.println(bean.getAge());
             System.out.println(bean.toString());
+            System.out.println("1111");
         } catch (JAXBException e) {
             e.printStackTrace();
         }
