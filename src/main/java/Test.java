@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Test {
     public static void main(String[] args) {
-        //
+
         //ScoketBean scoketBean = new ScoketBean();
         //scoketBean.setName("zhangsan");
         //scoketBean.setAge("22");
@@ -24,7 +24,10 @@ public class Test {
         //scoketBean.setBooks(books);
         //JaXmUtil.objectToXmlToFile(scoketBean,"d:\\teacher.xml");
         //System.out.println(JaXmUtil.convertToXml(scoketBean));
-        JaXmUtil.XmlfileToObject("d:\\teacher.xml");
+
+        ScoketBean scoketBean ;
+        scoketBean =JaXmUtil.xmlfileToObject("d:\\teacher.xml",ScoketBean.class);
+        System.out.println(scoketBean.getBooks().get(1).getBookName());
 
     }
 }

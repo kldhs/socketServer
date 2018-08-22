@@ -7,23 +7,24 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.StringReader;
 
-@XmlRootElement
+/**
+ * @author xs
+ */
+
 public class JaXmUtil {
 
-    /**
-     * JavaBean转换成xml
-     *
-     * @return
-     */
-
-    public static String convertToXml(Object obj) {
+    //将Java对象转换为Xml格式的字符串输出
+    public static String javaBeanToXmlString(Object obj) {
         try {
+            //使用作为参数传递的类以及可从这些类静态获得的类来实现初始化的
             JAXBContext context = JAXBContext.newInstance(obj.getClass());
+            //创造一个Marshaller对象，用来将Object转换为XML
             Marshaller marshaller = context.createMarshaller();
+            //设置编码方式
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "GBK");
+            //设置是否为文档事件
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
@@ -32,22 +33,21 @@ public class JaXmUtil {
             marshaller.marshal(obj, xmlStreamWriter);
             xmlStreamWriter.writeEndDocument();
             xmlStreamWriter.close();
+            //输出XML格式的字符串
             return new String(baos.toString("GBK"));
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
     }
 
-    /**
-     * xml转换成JavaBean
-     */
     @SuppressWarnings("unchecked")
-    public static <T> T converyToJavaBean(String xml, Class<T> c) {
+    //将Xml格式的字符串转换为指定的Java对象
+    public static <T> T xmlStringToJavaBean(String xml, Class<T> c) {
         T t = null;
         try {
             JAXBContext context = JAXBContext.newInstance(c);
+            //生成Unmarshaller对象，用于将XML格式的字符串转换为JavaBean
             Unmarshaller unmarshaller = context.createUnmarshaller();
             t = (T) unmarshaller.unmarshal(new StringReader(xml));
         } catch (Exception e) {
@@ -56,9 +56,12 @@ public class JaXmUtil {
         return t;
     }
 
-    public static void objectToXmlToFile(Object object, String filePath) {
+    //将Java对象转换为Xml文件输出
+    public static void javaBeanToXmlFile(Object object, String filePath) {
         try {
-            if (object == null || filePath == null || "".equals(filePath)) return;
+            if (object == null || filePath == null || "".equals(filePath)) {
+                return;
+            }
             File file = new File(filePath);
             JAXBContext context = JAXBContext.newInstance(object.getClass());
             Marshaller jaxbMarshaller = context.createMarshaller();
@@ -74,19 +77,18 @@ public class JaXmUtil {
         }
     }
 
-    public static void XmlfileToObject( String filePath) {
+    //将xml文件转换为指定Java对象
+    public static <T> T xmlfileToObject(String filePath, Class<T> c) {
         try {
             File xmlFile = new File(filePath);
-            ScoketBean scoketBean = new ScoketBean();
-            JAXBContext context = JAXBContext.newInstance(scoketBean.getClass());
+            JAXBContext context = JAXBContext.newInstance(c);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            ScoketBean bean = (ScoketBean) unmarshaller.unmarshal(xmlFile);
-            System.out.println(bean.getAge());
-            System.out.println(bean.toString());
-            System.out.println("1111");
+            T t = (T) unmarshaller.unmarshal(xmlFile);
+            return t;
         } catch (JAXBException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }
