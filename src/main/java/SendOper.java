@@ -14,22 +14,25 @@ public class SendOper {
     private static HashMap<String, SendOper> map = new HashMap<String, SendOper>();
     private String ip;
     private int port;
-    static int a = 0;
 
     private SendOper(String ip, int port) {
         super();
         this.ip = ip;
         this.port = port;
+        try {
+            serverSocket = new ServerSocket(port);
+            System.out.println("已建立"+ip+":"+port+"的ServerSocket");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private synchronized static SendOper getSendOper(String ip, int port) {
 //		synchronized (SendOper.class) {
         String key = getKey(ip, port);
         if (map.containsKey(key)) {
-            a = 1;
             return map.get(key);
         } else {
-            a = 0;
             SendOper oper = new SendOper(ip, port);
             map.put(key, oper);
             return oper;
@@ -45,10 +48,7 @@ public class SendOper {
         synchronized (this) {
             //synchronized (SendOper.class) {
             try {
-                if (a == 0) {
-                    serverSocket = new ServerSocket(port);
-                }
-                System.out.println("***服务器启动，等待客户端的连接***");
+                System.out.println("发送消息："+cmd+"的服务端socket建立，等待客户端连接");
                 socket = serverSocket.accept();
                 //从客户端读取消息
                 is = socket.getInputStream();
@@ -56,10 +56,12 @@ public class SendOper {
                 br = new BufferedReader(isr);
                 String info = null;
                 while ((info = br.readLine()) != null) {
-                    System.out.println("***我是服务器，客户端说：" + info+"***");
+                    System.out.println("我是服务器，客户端说：" + info);
+                    System.out.println("*************接收客户端消息完毕");
                 }
                 //关闭socket输入流
                 socket.shutdownInput();
+
                 //向客户端输出消息
                 os = socket.getOutputStream();
                 pw = new PrintWriter(os);
@@ -91,8 +93,8 @@ public class SendOper {
                     e.printStackTrace();
                 }
             }
+            return "*************与"+getKey(ip, port)+"相互通讯完毕";
         }
-        return "***已向"+getKey(ip, port)+"发送："+cmd+"***";
     }
 
     public static String send(String ip, int port, String cmd) {
