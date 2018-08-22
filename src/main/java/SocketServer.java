@@ -17,19 +17,11 @@ public class SocketServer {
 
     public static void main(String[] args) {
         sendByThread("127.0.0.1", 8088, "a");
-        //new Thread(){
-        //    public void run(){
-        //        try {
-        //            Thread.sleep(20000);
-        //            System.out.println("love");
-        //
-        //        } catch (InterruptedException e) { }
-        //    }
-        //}.start();
         sendByThread("127.0.0.1", 8088, "b");
-        //sendByThread("127.0.0.1", 8088, "c");
-        //sendByThread("127.0.0.1", 8089, "D");
-        //sendByThread("127.0.0.1", 8089, "E");
-        //sendByThread("127.0.0.1", 8089, "F");
+        sendByThread("127.0.0.1", 8088, "c");
+        sendByThread("127.0.0.1", 8089, "D");
+        sendByThread("127.0.0.1", 8089, "E");
+        sendByThread("127.0.0.1", 8089, "F");
+
     }
 }
