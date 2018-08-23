@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Test {
     public static void main(String[] args) {
 
@@ -22,11 +19,12 @@ public class Test {
         //books.add(book2);
         //
         //scoketBean.setBooks(books);
-        //JaXmUtil.objectToXmlToFile(scoketBean,"d:\\teacher.xml");
-        //System.out.println(JaXmUtil.convertToXml(scoketBean));
+
+        //JAXBUtil.objectToXmlToFile(scoketBean,"d:\\teacher.xml");
+        //System.out.println(JAXBUtil.convertToXml(scoketBean));
 
         ScoketBean scoketBean ;
-        scoketBean =JaXmUtil.xmlfileToObject("d:\\teacher.xml",ScoketBean.class);
+        scoketBean = JAXBUtil.xmlfileToObject("d:\\teacher.xml",ScoketBean.class);
         System.out.println(scoketBean.getBooks().get(1).getBookName());
 
     }

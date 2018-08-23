@@ -13,7 +13,7 @@ import java.io.StringReader;
  * @author xs
  */
 
-public class JaXmUtil {
+public class JAXBUtil {
 
     //将Java对象转换为Xml格式的字符串输出
     public static String javaBeanToXmlString(Object obj) {
